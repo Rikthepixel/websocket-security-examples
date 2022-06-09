@@ -61,7 +61,6 @@
             </div>
         </div>
     </div>
-
     <script>
         const ConnectButton = document.getElementById("ConnectBtn");
         const SocketActionsContainer = document.getElementById("SocketActionsContainer");
@@ -69,7 +68,6 @@
         const SendButton = document.getElementById("SendMsgBtn");
 
         let Socket = null;
-
         const SendMessage = () => Socket?.send("hello server");
 
         ConnectButton.addEventListener("click", () => {
@@ -82,11 +80,8 @@
             Socket.onerror = (err) => {
                 SocketActionsContainer.style.display = "none";
                 SendButton.removeEventListener("click", SendMessage);
-                console.log(err);
             };
-            Socket.onmessage = ({ data }) => {
-                console.log(data);
-            };
+            Socket.onmessage = ({ data }) => console.log(data);
         });
         DisconnectButton.addEventListener("click", () => {
             SocketActionsContainer.style.display = "none";
