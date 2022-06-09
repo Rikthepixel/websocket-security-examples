@@ -1,0 +1,9 @@
+{
+  "name": "code-examples",
+  "version": "1.0.0",
+  "author": "RikThePixel",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.7.0"
+  }
+}
