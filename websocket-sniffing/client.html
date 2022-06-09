@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Websocket Sniffing test 👃🏽</title>
+    <style>
+        :where(*, *:after, *:before) {
+            box-sizing: border-box;
+        }
+
+        :root {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        :where(button) {
+            background: rgb(5, 137, 220);
+            color: #fff;
+            padding: 1ch 2ch;
+            border-radius: 0.5rem;
+            border-style: none;
+            box-shadow: 0 0 0.25rem 0 rgba(0, 0, 0, 0.3);
+        }
+
+        :where(.header-lg, .header-sm) {
+            width: 100%;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .header-lg {
+            font-size: 4rem;
+        }
+
+        .header-sm {
+            font-size: 1.5rem;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-lg">Websocket Sniffing test 👃🏽</div>
+    <div class="container">
+        <button id="ConnectBtn">Connect WebSocket</button>
+        <div style="display: none;" id="SocketActionsContainer" class="container">
+            <div class="header-sm">WebSocket Actions</div>
+            <div>
+                <button id="SendMsgBtn">Send message</button>
+                <button id="DisconnectBtn">Disconnect WebSocket</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ConnectButton = document.getElementById("ConnectBtn");
+        const SocketActionsContainer = document.getElementById("SocketActionsContainer");
+        const DisconnectButton = document.getElementById("DisconnectBtn");
+        const SendButton = document.getElementById("SendMsgBtn");
+
+        let Socket = null;
+
+        const SendMessage = () => Socket?.send("hello server");
+
+        ConnectButton.addEventListener("click", () => {
+            Socket = new WebSocket("ws://192.168.189.1:3000");
+
+            Socket.onopen = () => {
+                SocketActionsContainer.style.display = "";
+                SendButton.addEventListener("click", SendMessage);
+            };
+            Socket.onerror = (err) => {
+                SocketActionsContainer.style.display = "none";
+                SendButton.removeEventListener("click", SendMessage);
+                console.log(err);
+            };
+            Socket.onmessage = ({ data }) => {
+                console.log(data);
+            };
+        });
+        DisconnectButton.addEventListener("click", () => {
+            SocketActionsContainer.style.display = "none";
+            if (Socket?.CLOSED) {
+                Socket.close();
+                Socket = null;
+            }
+        })
+    </script>
+</body>
+
+</html>

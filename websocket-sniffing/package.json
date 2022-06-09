@@ -1,0 +1,14 @@
+{
+  "name": "websocket-sniffing",
+  "author": "RikThePixel",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "ws": "^8.7.0"
+  }
+}
