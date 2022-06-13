@@ -1,0 +1,16 @@
+{
+    "include": [
+        "src"
+    ],
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "module": "commonjs",
+        "noEmitOnError": true,
+        "removeComments": false,
+        "sourceMap": true,
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true,
+        "esModuleInterop": true
+    }
+}
