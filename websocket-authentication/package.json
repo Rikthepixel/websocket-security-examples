@@ -1,0 +1,13 @@
+{
+  "name": "websocket-authentication",
+  "version": "1.0.0",
+  "author": "RikThePixel",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "ws": "^8.8.0"
+  }
+}
