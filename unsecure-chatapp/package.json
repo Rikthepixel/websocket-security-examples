@@ -6,10 +6,11 @@
   "scripts": {
     "start:client": "vite client",
     "start:server": "nodemon server/index.ts",
+    "start:build": "cd ./dist && node ./server/index.js",
     "start": "concurrently --kill-others \"npm run start:client\" \"npm run start:server\"",
     "build:client": "vite build client",
     "build:server": "tsc -p ./server",
-    "build": "npm run build:client && npm run build:server"
+    "build": "concurrently \"npm run build:client\" \"npm run build:server\""
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
