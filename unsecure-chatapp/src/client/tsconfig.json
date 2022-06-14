@@ -1,6 +1,6 @@
 {
-    "include": [
-        "src"
+    "exclude": [
+        "vite.config.js"
     ],
     "compilerOptions": {
         "noImplicitAny": false,

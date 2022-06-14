@@ -1,0 +1,68 @@
+.gc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #ebebeb;
+    overflow: auto;
+
+    & .header {
+
+    }
+    
+    & .chat-container {
+        min-height: 5rem;
+        margin-inline: 1rem;
+        background: #fff;
+        border-radius: 1rem;
+        flex: 1;
+
+        overflow-y: auto;
+    }
+    
+    & .user-control {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        padding: 1rem;
+        background-color: #d9ffd8;
+
+        & .input-container {
+            position: relative;
+            width: 100%;
+        
+            & .placeholder {
+                padding: 0.5rem;
+                position: absolute;
+                color: #838383
+            }
+    
+            & :where(input, [role="input"]) {
+                width: 100%;
+                padding: 0.5rem;
+    
+                border-radius: 1rem;
+                border-style: none;
+                background: #fff;
+    
+                resize: none;
+            }
+        }
+
+        & button {
+            border-radius: 1rem;
+            border-style: none;
+            padding: 0.5ch 1.5ch;
+
+            color: #fff;
+            background-color: rgb(24, 88, 44);
+
+            &:hover {
+                background-color: rgb(17, 65, 32);
+
+                &:active {
+                    background-color: rgb(16, 84, 37);
+                }
+            }
+        }
+    }
+}
