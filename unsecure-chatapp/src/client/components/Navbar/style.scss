@@ -1,0 +1,16 @@
+.navbar {
+    display: flex;
+    background-color: var(--accent);
+
+    & :where(.left, .right) {
+        width: 100%;
+        padding-inline: 1rem;
+
+        display: flex;
+        gap: 1rem;
+    }
+
+    & .center {
+        width: fit-content;
+    }
+}

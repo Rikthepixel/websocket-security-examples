@@ -1,0 +1,22 @@
+.register-page {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    background: #ebebeb;
+}
+
+.register-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    margin-inline: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    justify-content: center;
+
+    gap: 1rem;
+    background: #fff;
+    border-radius: 1rem;
+}

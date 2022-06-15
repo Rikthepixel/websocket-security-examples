@@ -1,0 +1,16 @@
+.btn {
+    border-radius: 1rem;
+    border-style: none;
+    padding: 0.5ch 1.5ch;
+
+    color: #fff;
+    background-color: var(--main);
+
+    &:hover {
+        background-color: var(--hover);
+
+        &:active {
+            background-color: var(--active);
+        }
+    }
+}

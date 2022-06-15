@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import Textarea from "react-textarea-autosize";
-import PageHeader from '../../components/PageHeader';
+import Button from '../../components/Button';
+import InputGroup from '../../components/InputGroup';
+import Navbar from '../../components/Navbar';
 import "./style.scss";
 
 const GlobalChat = () => {
@@ -8,12 +11,12 @@ const GlobalChat = () => {
 
     return (
         <div className="gc">
-            <PageHeader className="header">Chat</PageHeader>
+            <Navbar title="Chat" />
             <div className="chat-container">
 
             </div>
             <div className="user-control">
-                <div className="input-container">
+                <InputGroup>
                     <div style={{ display: inputText?.length < 1 ? "block" : "none" }} className="placeholder">Enter a message</div>
                     <Textarea
                         role="input"
@@ -22,10 +25,10 @@ const GlobalChat = () => {
                         onChange={(e) => setInputText(e.target.value)}
                         maxRows={6}
                     />
-                </div>
-                <button>
+                </InputGroup>
+                <Button>
                     Send
-                </button>
+                </Button>
             </div>
         </div >
     );
