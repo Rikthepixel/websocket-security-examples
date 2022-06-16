@@ -35,11 +35,11 @@ export default class JwtTokenLogic {
         return date < Date.now();
     };
 
-    verifyAccess = async<T extends JwtData>(tokenString: string): Promise<T> => {
+    verifyAccess = async (tokenString: string): Promise<JwtData> => {
         return new Promise((resolve, reject) => {
             try {
                 const token = jwt.verify(tokenString, this.tokenSecret);
-                return resolve(token.body["data"] as T);
+                return resolve(token.body);
             } catch (e) {
                 return reject(e);
             }

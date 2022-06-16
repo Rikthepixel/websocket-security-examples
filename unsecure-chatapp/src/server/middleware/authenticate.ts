@@ -4,7 +4,7 @@ interface TokenData {
     [key: string]: any;
 }
 interface IAuthService {
-    verifyAccess: <T extends TokenData>(tokenString: string) => Promise<T>;
+    verifyAccess: (tokenString: string) => Promise<TokenData>;
 };
 
 declare module "express" {

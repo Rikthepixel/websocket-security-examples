@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-interface IMessage {
+export interface IMessage {
     username: string,
     text: string;
 }
@@ -12,9 +12,11 @@ export default class ChatLogic {
     public GetChatlog = () => this.chatlog;
 
     public ListenForMessages = (callback: (msg: IMessage) => void) => {
-        this.emitter.on("message-sent", (message: IMessage) => {
-            callback(message);
-        });
+        this.emitter.on("message-sent", callback);
+    };
+
+    public StopListeningForMessages = (callback: (msg: IMessage) => void) => {
+        this.emitter.off("message-sent", callback);
     };
 
     public SendMessage = (msg: IMessage) => {
