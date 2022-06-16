@@ -1,7 +1,6 @@
 {
-    "include": [
-        "index.ts",
-        "src"
+    "exclude": [
+        "tsconfig.json",
     ],
     "compilerOptions": {
         "noImplicitAny": false,

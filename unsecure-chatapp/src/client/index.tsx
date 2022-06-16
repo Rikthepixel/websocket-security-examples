@@ -8,6 +8,8 @@ const root = createRoot(
     document.getElementById("react-root")
 );
 
+const ws = new WebSocket("ws://localhost:3001/api/chat/connect");
+
 root.render(
     <React.StrictMode>
         <BrowserRouter>
