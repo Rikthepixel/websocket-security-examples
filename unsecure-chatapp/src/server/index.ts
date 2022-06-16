@@ -3,9 +3,11 @@ import path from 'path';
 import "./logic";
 import apiRoutes from "./api";
 import bodyParser from 'body-parser';
+import cors from "cors";
 const app = Express();
 const clientPath = path.join(__dirname, "../client");
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/public", Express.static(

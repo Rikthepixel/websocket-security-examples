@@ -1,7 +1,6 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
 import { sendError } from '../utils/Sender';
 import { jwtLogic, userLogic } from '../logic';
-import authenticate from '../middleware/authenticate';
 
 const router = Router();
 
@@ -43,7 +42,7 @@ router.post("/login", async (req, res) => {
         success = result.success,
             userData = result.userData;
     } catch (error) {
-        sendError(res, error);
+        return sendError(res, error);
     }
 
     let tokens;
@@ -64,7 +63,7 @@ router.post("/refresh", async (req, res) => {
     const refreshToken = req.body.token;
     let jwt = null;
     try {
-        jwt = await jwtLogic.verifyRefresh(req.body.token);
+        jwt = await jwtLogic.verifyRefresh(refreshToken);
     }
     catch (e) {
         return sendError(res, e);
@@ -82,6 +81,20 @@ router.post("/refresh", async (req, res) => {
     }
 
     res.send(signedTokens);
+});
+
+router.delete("/logout", async (req: Request, res: Response) => {
+    const refreshToken = req.body.token;
+    if (!refreshToken) return res.status(400).send("No token specified");
+    let result = false;
+    try {
+        result = await jwtLogic.invalidateRefresh(refreshToken);
+    } catch {
+        const err = new Error("Internal Server Error");
+        err.name = "500";
+        return sendError(res, err);
+    }
+    return res.send(result);
 });
 
 export default router; 

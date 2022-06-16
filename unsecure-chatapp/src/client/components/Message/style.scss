@@ -1,0 +1,11 @@
+.message-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2rem;
+
+
+    &[data-is-own="true"] {
+        justify-content: flex-start;
+    }
+}

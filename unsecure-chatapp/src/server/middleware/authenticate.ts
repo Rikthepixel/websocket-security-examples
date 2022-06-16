@@ -27,8 +27,13 @@ const authenticate = (service: IAuthService) => {
             req.auth = tokenContent;
             return next();
         }).catch((err) => {
+            if (err.name === "JwtParseError") {
+                return res.status(403).send(err.userMessage);
+            }
+
             if (err?.message && err?.name) {
-                return res.status(err?.name).send(err.message);
+                const code = parseInt(err?.name);
+                return res.status(code || 500).send(code ? err.message : "Internal Server Error");
             }
             return res.sendStatus(500);
         });

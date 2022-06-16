@@ -6,7 +6,12 @@ export interface IMessage {
 }
 
 export default class ChatLogic {
-    private chatlog: IMessage[] = [];
+    private chatlog: IMessage[] = [
+        {
+            username: "Rik",
+            text: "Hellow"
+        }
+    ];
     private emitter: EventEmitter = new EventEmitter();
 
     public GetChatlog = () => this.chatlog;

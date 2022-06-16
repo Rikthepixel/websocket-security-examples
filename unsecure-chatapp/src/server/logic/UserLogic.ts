@@ -47,8 +47,6 @@ export default class UserLogic {
     };
 
     public LoginUser = async (username: string, password: string) => {
-        console.log(username);
-
         const user = await this.GetUser(username);
         if (typeof user !== "string") return ThrowBadRequest("User does not exist");
 

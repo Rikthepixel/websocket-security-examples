@@ -12,11 +12,14 @@ const wsRoute = new ws.Server({
 });
 
 router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
-    res.send(chatLogic.GetChatlog());
+    res.send({
+        messages: chatLogic.GetChatlog()
+    });
 });
+
 router.get("/connect", authenticate(jwtLogic), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
     const user = req.auth.data;
-    
+
     socket.on("user-message", (text: string) => {
 
         chatLogic.SendMessage({

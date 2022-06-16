@@ -53,8 +53,6 @@ export default class JwtTokenLogic {
 
             let token;
 
-            console.log("Hi");
-
             try {
                 token = jwt.create(
                     {
