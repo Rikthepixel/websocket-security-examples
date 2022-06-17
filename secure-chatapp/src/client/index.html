@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket chatter</title>
+    <style>
+        :root {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --main: #18582c;
+            --hover: #114120;
+            --active: #105425;
+            --neutral: #88b394;
+            --accent: #ebebeb;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        * {
+            margin: 0;
+        }
+
+        html,
+        body,
+        #react-root {
+            height: 100%;
+        }
+
+        #react-root {
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img,
+        picture,
+        video,
+        canvas,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            overflow-wrap: break-word;
+        }
+
+        #react-root,
+        #__next {
+            isolation: isolate;
+        }
+
+        .error {
+            color: red
+        }
+    </style>
+</head>
+
+<body>
+    <script defer type="module" src="./index.tsx"></script>
+    <div id="react-root"></div>
+</body>
+
+</html>

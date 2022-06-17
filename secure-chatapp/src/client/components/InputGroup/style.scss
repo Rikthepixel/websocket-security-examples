@@ -1,0 +1,14 @@
+.input-group {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+
+    & input {
+        padding-inline: 0.5rem;
+        padding-block: 0.4rem;
+        border-radius: 1rem;
+        border-style: solid;
+        border-color: rgb(24, 88, 44);
+    }
+}

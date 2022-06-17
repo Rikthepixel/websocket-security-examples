@@ -1,0 +1,45 @@
+.gc {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--accent);
+    overflow: auto;
+
+    & .header {
+
+    }
+    
+    & .chat-container {
+        min-height: 5rem;
+        margin-inline: 1rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        flex: 1;
+
+        overflow-y: auto;
+    }
+    
+    & .user-control {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+        padding: 1rem;
+        background-color: var(--neutral);
+    
+            & :where(input, [role="input"]) {
+                width: 100%;
+                padding: 0.5rem;
+    
+                border-radius: 1rem;
+                border-style: none;
+                background: #fff;
+    
+                resize: none;
+
+                &:placeholder{
+                    text-align: start;
+                        color: #838383;
+                }
+            }
+    }
+}
