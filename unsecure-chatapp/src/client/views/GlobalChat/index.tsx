@@ -20,14 +20,14 @@ const GlobalChat = () => {
     messagesRef.current = messages;
 
     const sendMsg = useCallback(() => {
-        console.log(ws);
-
+        if (inputText.length < 1) return
         if (!ws.current) return;
 
         ws.current.send(JSON.stringify({
             type: "user-message",
             args: inputText
         }));
+        setInputText("");
 
     }, [ws.current, inputText]);
 
