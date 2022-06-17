@@ -1,4 +1,4 @@
-import { Request, Router } from 'express';
+import { Request, response, Router } from 'express';
 import { chatLogic, jwtLogic } from '../logic';
 import { IMessage } from '../logic/ChatLogic';
 import authenticate from '../middleware/authenticate';
@@ -18,21 +18,37 @@ router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
 });
 
 router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
-    const user = req.auth.data;
+    const authData = req.auth;
+    const userData = authData.data;
+
+    socket.use(() => {
+        if (!jwtLogic.verifyDate(authData.exp)) {
+            socket.sendType("reauthenticate-request", null);
+            return false;
+        }
+        return true;
+    });
+
+    socket.on("reauthenticate-response", async (token: string) => {
+        let tokens = null;
+        try {
+            tokens = await jwtLogic.signAccess({ username: userData.username }, token, true);
+        } catch (err) {
+            console.log(err);
+        }
+        socket.sendType("reauthenticate-response", tokens);
+    });
 
     socket.on("user-message", (text: string) => {
 
         chatLogic.SendMessage({
-            username: user.username,
+            username: userData.username,
             text: text
         });
 
     });
 
-    const handleMessage = (message: IMessage) => {
-        //if (message.username === user) return;
-        socket.send(JSON.stringify({ type: "user-message", args: message }));
-    };
+    const handleMessage = (message: IMessage) => socket.sendType("user-message", message);;
 
     chatLogic.ListenForMessages(handleMessage);
 

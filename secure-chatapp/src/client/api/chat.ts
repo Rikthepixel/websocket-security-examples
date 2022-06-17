@@ -14,16 +14,23 @@ export const getChatlog = async (accessToken: string) => {
     });
 };
 
-export const ConnectWs = (access: string, onUserMsg: (msg: IMessage) => void) => {
+export const ConnectWs = (access: string, onUserMsg: (msg: IMessage) => void, getRefresh: () => string, reauth: (access: string, refresh: string) => void) => {
     const ws = new WebSocket(`wss://localhost:3001/api/chat/connect?token=${access}`);
-    ws.onopen = () => {
-
-    };
 
     ws.onmessage = (msg) => {
-        const data = JSON.parse(msg.data);
-        if (data.type === "user-message") {
-            onUserMsg(data.args);
+        const { type, args } = JSON.parse(msg.data);
+
+        if (type === "user-message") {
+            onUserMsg(args);
+        }
+        if (type === "reauthenticate-request") {
+            ws.send(JSON.stringify({
+                type: "reauthenticate-response",
+                args: getRefresh()
+            }));
+        }
+        if (type === "reauthenticat-response") {
+            reauth(args.access, args.refresh);
         }
     };
 

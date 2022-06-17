@@ -3,9 +3,12 @@ import { Server, WebSocket } from "ws";
 
 const disallowedEvents = ["close", "error", "message", "open", "ping", "pong", "redirect", "unexprected-response", "upgrade"];
 
-export type UseHandler = (event: string, data: any, socket: WsExtended, req: Request) => void | Promise<void>;
+type IWsArgs = any | { [key: string]: any; };
+
+export type UseHandler = (event: string, data: any, socket: WsExtended, req: Request) => boolean | Promise<boolean>;
 export class WsExtended extends WebSocket {
     use: (handler: UseHandler) => void;
+    sendType: (event: string, args: IWsArgs) => void;
 }
 
 export default (wsApp: Server, onConnect?: (socket: WsExtended, req: Request) => void) => {
@@ -22,9 +25,14 @@ export default (wsApp: Server, onConnect?: (socket: WsExtended, req: Request) =>
                 middleware.push(handler);
             };
 
-            ws.on("message", async (rawData) => {
-                console.log(rawData.toString());
+            ws.sendType = (event: string, args: IWsArgs) => {
+                ws.send(JSON.stringify({
+                    type: event,
+                    args: args
+                }));
+            };
 
+            ws.on("message", async (rawData) => {
                 let data = null;
                 try {
                     data = JSON.parse(rawData.toString());
@@ -36,15 +44,20 @@ export default (wsApp: Server, onConnect?: (socket: WsExtended, req: Request) =>
                     return;
                 }
 
+                let shouldContinue = true;
                 for (const func of middleware) {
+
                     const isAsync = func.constructor.name === 'AsyncFunction';
                     if (isAsync) {
-                        await func(data.type, data.args, ws, req);
+                        shouldContinue = await func(data.type, data.args, ws, req);
                     } else {
-                        func(data.type, data.args, ws, req);
+                        shouldContinue = func(data.type, data.args, ws, req) as boolean;
+                    }
+
+                    if (!shouldContinue) {
+                        return;
                     }
                 }
-                console.log(data.type, typeof data.type);
 
                 ws.emit(data.type, data.args);
             });
