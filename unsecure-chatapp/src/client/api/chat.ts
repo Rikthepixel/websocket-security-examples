@@ -14,9 +14,7 @@ export const getChatlog = async (accessToken: string) => {
     });
 };
 
-let connection: WebSocket = null;
-
-export const ConnectWs = async (access: string, onUserMsg: (msg: IMessage) => void) => {
+export const ConnectWs = (access: string, onUserMsg: (msg: IMessage) => void) => {
     const ws = new WebSocket(`ws://localhost:3001/api/chat/connect?token=${access}`);
     ws.onopen = () => {
 

@@ -37,12 +37,24 @@ const GlobalChat = () => {
         getChatlog(auth.access)
             .then(async (messages) => {
                 setMessages(messages);
-                ws.current = await ConnectWs(auth.access, (msg) => {
-                    setMessages([
-                        ...messagesRef.current,
-                        msg
-                    ]);
-                });
+                const connectToSocket = () => {
+                    ws.current = ConnectWs(auth.access, (msg) => {
+                        setMessages([
+                            ...messagesRef.current,
+                            msg
+                        ]);
+                    });
+                }
+                
+                if (ws.current) {
+                    ws.current.onclose = () => {
+                        ws.current.close();
+                        ws.current = null;
+                        connectToSocket()
+                    }
+                } else {
+                    connectToSocket()
+                }
             })
             .catch((err) => {
                 if (hasToRefresh(err)) {
