@@ -27,4 +27,4 @@ wsServer.on("connection", (socket) => {
     socket.send("Hello world"); //Send data to the client
 });
 
-server.listen(4000, () => console.log("Server started"));
+server.listen(4080, () => console.log("Server started"));
