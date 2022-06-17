@@ -12,20 +12,26 @@ export default class ChatLogic {
             text: "Hellow"
         }
     ];
+    private listeners: ((...any) => any)[] = [];
     private emitter: EventEmitter = new EventEmitter();
 
     public GetChatlog = () => this.chatlog;
 
     public ListenForMessages = (callback: (msg: IMessage) => void) => {
-        this.emitter.on("message-sent", callback);
+        this.listeners.push(callback);
     };
 
     public StopListeningForMessages = (callback: (msg: IMessage) => void) => {
-        this.emitter.off("message-sent", callback);
+        const index = this.listeners.indexOf(callback);
+        if (index !== -1) {
+            delete this.listeners[index];
+        }
     };
 
     public SendMessage = (msg: IMessage) => {
-        this.emitter.emit("message-sent", msg);
+        this.listeners.forEach(listener => {
+            listener(msg);
+        });
         this.chatlog.push(msg);
     };
 }

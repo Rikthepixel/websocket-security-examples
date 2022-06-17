@@ -23,6 +23,8 @@ export default (wsApp: Server, onConnect?: (socket: WsExtended, req: Request) =>
             };
 
             ws.on("message", async (rawData) => {
+                console.log(rawData.toString());
+
                 let data = null;
                 try {
                     data = JSON.parse(rawData.toString());
@@ -42,6 +44,7 @@ export default (wsApp: Server, onConnect?: (socket: WsExtended, req: Request) =>
                         func(data.type, data.args, ws, req);
                     }
                 }
+                console.log(data.type, typeof data.type);
 
                 ws.emit(data.type, data.args);
             });

@@ -8,10 +8,26 @@ export const getChatlog = async (accessToken: string) => {
                 authorization: `Bearer ${accessToken}`
             }
         }).then((response) => {
-            console.log(response);
-
             const data = response.data as IChatlogResponse;
-            res(data.message);
+            res(data.messages);
         }).catch((err) => rej(err?.response?.data || err.message));
     });
+};
+
+let connection: WebSocket = null;
+
+export const ConnectWs = async (access: string, onUserMsg: (msg: IMessage) => void) => {
+    const ws = new WebSocket(`ws://localhost:3001/api/chat/connect?token=${access}`);
+    ws.onopen = () => {
+
+    };
+
+    ws.onmessage = (msg) => {
+        const data = JSON.parse(msg.data);
+        if (data.type === "user-message") {
+            onUserMsg(data.args);
+        }
+    };
+
+    return ws;
 };

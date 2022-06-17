@@ -13,16 +13,21 @@ declare module "express" {
     }
 }
 
-const authenticate = (service: IAuthService) => {
+const authenticate = (service: IAuthService, getParam: boolean = false) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        const authHeader = req.headers.authorization;
+        let tokenString = "";
+        if (!getParam) {
+            const authHeader = req.headers.authorization;
 
-        if (typeof authHeader !== "string") return res.status(403).send("No authorization header specified");
-        const headerParts = authHeader.split(" ");
-        if (headerParts[0] !== "Bearer") return res.status(403).send("Invalid authorization header type. Header must be bearer");
-        const tokenString = headerParts[1];
+            if (typeof authHeader !== "string") return res.status(403).send("No authorization header specified");
+            const headerParts = authHeader.split(" ");
+            if (headerParts[0] !== "Bearer") return res.status(403).send("Invalid authorization header type. Header must be bearer");
+            tokenString = headerParts[1];
+        } else {
+            tokenString = req.query.token.toString();
+        }
+
         if (!tokenString) return res.status(403).send("Invalid authorization header");
-
         service.verifyAccess(tokenString).then((tokenContent) => {
             req.auth = tokenContent;
             return next();

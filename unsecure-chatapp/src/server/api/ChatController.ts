@@ -17,7 +17,7 @@ router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
     });
 });
 
-router.get("/connect", authenticate(jwtLogic), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
+router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
     const user = req.auth.data;
 
     socket.on("user-message", (text: string) => {
@@ -30,8 +30,8 @@ router.get("/connect", authenticate(jwtLogic), WsConnect(wsRoute, (socket: WsExt
     });
 
     const handleMessage = (message: IMessage) => {
-        if (message.username === user) return;
-        socket.send({ type: "user-message", args: message });
+        //if (message.username === user) return;
+        socket.send(JSON.stringify({ type: "user-message", args: message }));
     };
 
     chatLogic.ListenForMessages(handleMessage);

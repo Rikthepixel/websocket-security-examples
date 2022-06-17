@@ -9,9 +9,11 @@ interface IMessageProps {
 
 const Message = (props: IMessageProps) => {
     return (
-        <div data-is-own={props.isOwn}>
-            {props.username}
-            {props.text}
+        <div className='message' data-is-own={props.isOwn}>
+            <div className='text-container'>
+                <div className='user'>{props.username}</div>
+                <div>{props.text}</div>
+            </div>
         </div>
     );
 };

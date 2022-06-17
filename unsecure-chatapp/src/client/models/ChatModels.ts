@@ -4,5 +4,5 @@ export interface IMessage {
 }
 
 export interface IChatlogResponse {
-    message: IMessage[];
+    messages: IMessage[];
 }

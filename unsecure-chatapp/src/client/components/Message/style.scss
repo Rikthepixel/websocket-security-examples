@@ -1,11 +1,26 @@
-.message-container {
+.message {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 2rem;
+    padding: 1rem;
 
 
     &[data-is-own="true"] {
         justify-content: flex-start;
+
+        & .text-container {
+            background: rgb(17, 141, 224);
+        }
+    }
+
+    & .text-container {
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        background: rgb(20, 211, 17);
+
+        .user {
+            color: rgb(233, 233, 233);
+            font-size: 0.8rem;
+        }
     }
 }
