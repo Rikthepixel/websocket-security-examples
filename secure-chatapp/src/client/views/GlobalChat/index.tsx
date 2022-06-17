@@ -12,7 +12,7 @@ import "./style.scss";
 
 const GlobalChat = () => {
 
-    const [auth, , refresh] = useAuth();
+    const [auth, setAuth, refresh] = useAuth();
     const ws = useRef<WebSocket>();
     const [inputText, setInputText] = useState("");
     const messagesRef = useRef<IMessage[]>();
@@ -20,7 +20,7 @@ const GlobalChat = () => {
     messagesRef.current = messages;
 
     const sendMsg = useCallback(() => {
-        if (inputText.length < 1) return
+        if (inputText.length < 1) return;
         if (!ws.current) return;
 
         ws.current.send(JSON.stringify({
@@ -38,25 +38,31 @@ const GlobalChat = () => {
             .then(async (messages) => {
                 setMessages(messages);
                 const connectToSocket = () => {
-                    ws.current = ConnectWs(auth.access, (msg) => {
-                        setMessages([
+                    ws.current = ConnectWs(
+                        auth.access,
+                        (msg) => setMessages([
                             ...messagesRef.current,
                             msg
-                        ]);
-                    });
-                }
-                
+                        ]),
+                        () => auth.access,
+                        (access, refresh) => setAuth({
+                            loggedIn: true,
+                            username: auth.username,
+                            access: access,
+                            refresh: refresh
+                        })
+                    );
+                };
                 if (ws.current) {
                     ws.current.onclose = () => {
                         ws.current.close();
                         ws.current = null;
-                        connectToSocket()
-                    }
+                        connectToSocket();
+                    };
                 } else {
-                    connectToSocket()
+                    connectToSocket();
                 }
-            })
-            .catch((err) => {
+            }).catch((err) => {
                 if (hasToRefresh(err)) {
                     refresh();
                 }
