@@ -76,7 +76,7 @@
         const SendMessage = () => Socket?.send("hello server");
 
         ConnectButton.addEventListener("click", () => {
-            Socket = new WebSocket("ws://localhost:3000");
+            Socket = new WebSocket("ws://localhost:7000");
 
             Socket.onopen = () => {
                 SocketActionsContainer.style.display = "";

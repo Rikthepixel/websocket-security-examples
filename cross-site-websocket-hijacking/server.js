@@ -1,6 +1,7 @@
 const cookie = require("cookie");
 const express = require("express");
 const http = require("http");
+const { cwd } = require("process");
 const ws = require("ws");
 
 const app = express();
@@ -12,7 +13,7 @@ const password = "Super secret password!!!!";
 
 app.get("/", (req, res) => {
     res.cookie("password", password, { maxAge: 600000 });
-    res.send("Here have a cookie 🍪");
+    res.sendFile("client.html", { root: cwd() });
 });
 
 server.on('upgrade', (request, socket, head) => {
@@ -37,4 +38,4 @@ wsApp.on("connection", (socket) => {
 
 });
 
-server.listen(3000, () => console.log("Server Started on http://localhost:3000 😇"));
+server.listen(7000, () => console.log("Server Started on http://localhost:7000 😇"));

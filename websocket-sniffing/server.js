@@ -18,4 +18,4 @@ wsApp.on("connection", (socket) => {
 
 });
 
-server.listen(3000, () => console.log("Server Started on http://localhost:3000"));
+server.listen(5000, () => console.log("Server Started on http://localhost:5000"));
