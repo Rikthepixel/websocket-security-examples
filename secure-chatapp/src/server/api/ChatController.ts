@@ -3,13 +3,17 @@ import { chatLogic, jwtLogic } from '../logic';
 import { IMessage } from '../logic/ChatLogic';
 import authenticate from '../middleware/authenticate';
 import WsConnect, { WsExtended } from '../utils/WsConnect';
+import socketLimiter from "ws-rate-limit";
 import ws from 'ws';
 
 const router = Router();
 
 const wsRoute = new ws.Server({
     noServer: true,
+    maxPayload: 10485760 //10MiB
 });
+
+const limiter = socketLimiter("1s", 10); //can only make 10 requests every second
 
 router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
     res.send({
@@ -20,6 +24,8 @@ router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
 router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
     const authData = req.auth;
     const userData = authData.data;
+
+    limiter(socket);
 
     socket.use(() => {
         if (!jwtLogic.verifyDate(authData.exp)) {
