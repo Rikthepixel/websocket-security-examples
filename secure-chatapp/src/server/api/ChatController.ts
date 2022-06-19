@@ -21,20 +21,15 @@ router.get("/chatlog", authenticate(jwtLogic), (req, res) => {
     });
 });
 
+
+
 router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket: WsExtended, req: Request) => {
     const authData = req.auth;
     const userData = authData.data;
 
     limiter(socket);
 
-    socket.use(() => {
-        if (!jwtLogic.verifyDate(authData.exp)) {
-            socket.sendType("reauthenticate-request", null);
-            return false;
-        }
-        return true;
-    });
-
+    //Generate new tokens for the client
     socket.on("reauthenticate-response", async (token: string) => {
         let tokens = null;
         try {
@@ -42,11 +37,28 @@ router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket:
         } catch (err) {
             console.log(err);
         }
+
+        //Set the authData experation data to the current token experation date
+        try {
+            const data = await jwtLogic.verifyAccess(tokens.access);
+            authData.exp = data.exp;
+        } catch (err) {
+            console.log(err);
+        }
+
+        socket.emit("reauthenticated");
+        //Respond to the client with their new tokens
         socket.sendType("reauthenticate-response", tokens);
     });
 
     socket.on("user-message", (text: string) => {
 
+        //Check if the client needs to reauthenticate
+        if (!jwtLogic.verifyDate(authData.exp)) {
+            return socket.sendType("reauthenticate-request", null);
+        }
+
+        //Handle the actual message
         chatLogic.SendMessage({
             username: userData.username,
             text: text
@@ -54,7 +66,23 @@ router.get("/connect", authenticate(jwtLogic, true), WsConnect(wsRoute, (socket:
 
     });
 
-    const handleMessage = (message: IMessage) => socket.sendType("user-message", message);;
+    const handleMessage = (message: IMessage) => {
+        const sendResponse = () => socket.sendType("user-message", message);
+
+        //Check if the client needs to reauthenticate
+        if (!jwtLogic.verifyDate(authData.exp)) {
+            const onReauthed = () => {
+                sendResponse();
+                socket.on("reauthenticated", onReauthed);
+            };
+
+            //Buffer the message to only sned when reauthenticated
+            socket.on("reauthenticated", onReauthed);
+            return socket.sendType("reauthenticate-request", null);
+        }
+
+        sendResponse();
+    };
 
     chatLogic.ListenForMessages(handleMessage);
 
